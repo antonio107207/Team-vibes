@@ -91,6 +91,3 @@ production:
     encoding: unicode
     url: <%= ENV["DATABASE_URL"] %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  queue:
-    <<: *primary_production
-    migrations_paths: db/queue_migrate
