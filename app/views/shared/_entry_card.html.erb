@@ -28,9 +28,10 @@
     <% end %>
   <% end %>
   <% if entry.description.present? %>
-    <% preview_url = entry.description[/href="(https?:\/\/[^"]+)"/, 1] || entry.description[/https?:\/\/[^\s"<>]+/] %>
-    <% if preview_url %>
-      <div data-controller="link-preview" data-link-preview-url-value="<%= preview_url %>"></div>
+    <% preview_urls = entry.description.scan(/href="(https?:\/\/[^"]+)"/).flatten.uniq.first(3) %>
+    <% preview_urls = entry.description.scan(/https?:\/\/[^\s"<>]+/).uniq.first(3) if preview_urls.empty? %>
+    <% if preview_urls.any? %>
+      <div data-controller="link-preview" data-link-preview-urls-value="<%= preview_urls.to_json %>"></div>
     <% end %>
   <% end %>
 

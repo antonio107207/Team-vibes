@@ -17,7 +17,6 @@ console_command = '/rails/bin/rails console'
 
 [processes]
   app = './bin/rails server'
-  solidq = 'bundle exec rake solid_queue:start'
 
 [http_service]
   internal_port = 8080
@@ -41,10 +40,4 @@ console_command = '/rails/bin/rails console'
 
 [[vm]]
   size = 'shared-cpu-1x'
-  memory = '256mb'
-  processes = ['app']
-
-[[vm]]
-  size = 'shared-cpu-1x'
-  memory = '256mb'
-  processes = ['solidq']
+  memory = '512mb'

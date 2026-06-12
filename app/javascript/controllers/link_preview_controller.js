@@ -1,11 +1,13 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static values = { url: String }
+  static values = { urls: Array }
 
   connect() {
-    if (!this.hasUrlValue || !this.urlValue) return
-    this.load(this.urlValue)
+    if (!this.hasUrlsValue || !this.urlsValue.length) return
+    // Already rendered (Turbo cache restore) — skip re-fetch
+    if (this.element.children.length > 0) return
+    this.urlsValue.forEach(url => this.load(url))
   }
 
   async load(url) {
@@ -16,7 +18,7 @@ export default class extends Controller {
       if (!res.ok) return
       const data = await res.json()
       if (data.error || !data.title) return
-      this.element.insertAdjacentHTML("afterend", this.card(data, url))
+      this.element.insertAdjacentHTML("beforeend", this.card(data, url))
     } catch {}
   }
 
