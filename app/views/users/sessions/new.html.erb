@@ -12,8 +12,18 @@
     }
   </script>
 </head>
-<body class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 min-h-screen flex items-center justify-center px-4 transition-colors duration-200">
+<body class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 min-h-screen flex flex-col items-center justify-center px-4 transition-colors duration-200">
   <div class="w-full max-w-sm">
+    <% if flash[:alert] %>
+      <div class="mb-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-300 rounded-xl px-4 py-3 text-sm">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+    <% if flash[:notice] %>
+      <div class="mb-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-800 dark:text-green-300 rounded-xl px-4 py-3 text-sm">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
     <div class="text-center mb-8">
       <p class="text-5xl mb-3">✨</p>
       <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Team Vibes</h1>
