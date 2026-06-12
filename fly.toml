@@ -1,0 +1,50 @@
+# fly.toml app configuration file generated for team-vibes on 2026-06-12T16:44:50+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'team-vibes'
+primary_region = 'ams'
+console_command = '/rails/bin/rails console'
+
+[build]
+
+[deploy]
+  release_command = './bin/rails db:prepare'
+
+[env]
+  PORT = '8080'
+
+[processes]
+  app = './bin/rails server'
+  solidq = 'bundle exec rake solid_queue:start'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [[http_service.checks]]
+    interval = '10s'
+    timeout = '2s'
+    grace_period = '5s'
+    method = 'GET'
+    path = '/up'
+    protocol = 'http'
+    tls_skip_verify = false
+
+    [http_service.checks.headers]
+      X-Forwarded-Proto = 'https'
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '256mb'
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'
+  memory = '256mb'
+  processes = ['solidq']
