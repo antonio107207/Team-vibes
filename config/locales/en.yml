@@ -76,6 +76,9 @@ en:
       bio_label: "About"
       bio_placeholder: "A few words about yourself..."
       submit: "Save"
+      upload_photo: "Upload photo"
+      confirm_crop: "Apply"
+      cancel: "Cancel"
 
   favorites:
     title: "Favorites"

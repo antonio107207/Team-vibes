@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :favorites, dependent: :destroy
   has_many :favorited_entries, through: :favorites, source: :hobby_entry
 
+  has_one_attached :avatar
+
   has_many :follows,         foreign_key: :follower_id, class_name: "Follow", dependent: :destroy
   has_many :followees,       through: :follows
   has_many :reverse_follows, foreign_key: :followee_id, class_name: "Follow", dependent: :destroy

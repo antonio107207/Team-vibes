@@ -78,6 +78,9 @@ uk:
       bio_label: "Про себе"
       bio_placeholder: "Кілька слів про себе..."
       submit: "Зберегти"
+      upload_photo: "Завантажити фото"
+      confirm_crop: "Підтвердити"
+      cancel: "Скасувати"
 
   favorites:
     title: "Улюблене"

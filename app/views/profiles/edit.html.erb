@@ -1,19 +1,57 @@
 <div class="max-w-lg mx-auto">
   <h1 class="text-xl font-bold text-gray-900 dark:text-white mb-6"><%= t('profiles.edit.title') %></h1>
 
-  <%= form_with model: current_user, url: profile_path(current_user), method: :patch, class: "space-y-4" do |f| %>
+  <%= form_with model: current_user, url: profile_path(current_user), method: :patch,
+      multipart: true, class: "space-y-5" do |f| %>
     <% if current_user.errors.any? %>
       <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
         <% current_user.errors.full_messages.each do |msg| %><p><%= msg %></p><% end %>
       </div>
     <% end %>
 
-    <div class="flex items-center gap-4 mb-2">
-      <img src="<%= current_user.avatar_or_initials %>" class="w-14 h-14 rounded-full object-cover" alt="">
-      <div class="flex-1">
-        <%= f.label :avatar_url, t('profiles.edit.avatar_label'), class: "block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" %>
-        <%= f.url_field :avatar_url, placeholder: "https://...",
-            class: "w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500" %>
+    <%# Avatar upload %>
+    <div data-controller="avatar-upload" class="flex flex-col items-center gap-2">
+      <button type="button" data-action="click->avatar-upload#open"
+              class="relative group cursor-pointer">
+        <img data-avatar-upload-target="preview"
+             src="<%= user_avatar_url(current_user) %>"
+             class="w-24 h-24 rounded-full object-cover ring-4 ring-indigo-100 dark:ring-indigo-900/60 shadow-md"
+             alt="">
+        <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+      </button>
+      <button type="button" data-action="click->avatar-upload#open"
+              class="text-sm text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer font-medium">
+        <%= t('profiles.edit.upload_photo') %>
+      </button>
+
+      <%= f.file_field :avatar,
+          accept: "image/*",
+          class: "hidden",
+          data: { "avatar-upload-target": "input", action: "change->avatar-upload#select" } %>
+
+      <%# Crop modal %>
+      <div data-avatar-upload-target="modal"
+           class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden w-full max-w-sm shadow-2xl">
+          <div class="h-72 bg-gray-900 overflow-hidden">
+            <img data-avatar-upload-target="cropImage" src="" class="block max-w-full" alt="">
+          </div>
+          <div class="flex gap-3 p-4">
+            <button type="button" data-action="click->avatar-upload#close"
+                    class="flex-1 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer">
+              <%= t('profiles.edit.cancel') %>
+            </button>
+            <button type="button" data-action="click->avatar-upload#confirm"
+                    class="flex-1 py-2.5 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition cursor-pointer">
+              <%= t('profiles.edit.confirm_crop') %>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 

@@ -85,7 +85,7 @@
 
     <%= form_with model: [@entry, @comment], id: "new_comment_form", data: { turbo_stream: true } do |f| %>
       <div class="flex gap-2">
-        <img src="<%= current_user.avatar_or_initials %>" class="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5" alt="">
+        <img src="<%= user_avatar_url(current_user) %>" class="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5" alt="">
         <div class="flex-1 flex gap-2">
           <%= f.text_field :body, placeholder: t('show_entry.comment_placeholder'),
               class: "flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500",

@@ -30,9 +30,9 @@
           <%= t('nav.add') %>
         <% end %>
 
-        <div class="relative" data-controller="dropdown">
+        <div class="relative z-20" data-controller="dropdown">
           <button data-action="click->dropdown#toggle" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white cursor-pointer">
-            <img src="<%= current_user.avatar_or_initials %>" class="w-8 h-8 rounded-full object-cover" alt="<%= current_user.name %>">
+            <img src="<%= user_avatar_url(current_user) %>" class="w-8 h-8 rounded-full object-cover" alt="<%= current_user.name %>">
           </button>
           <div data-dropdown-target="menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 text-sm">
             <%= link_to current_user.name, profile_path(current_user), class: "block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium truncate" %>
@@ -59,16 +59,46 @@
   </div>
 
   <% if user_signed_in? %>
-    <div class="max-w-2xl mx-auto px-4 pb-2 flex gap-1 overflow-x-auto scrollbar-hide text-sm">
-      <% following_active = request.path == root_path && params[:filter] == "following" %>
-      <% all_active = request.path == root_path && params[:filter] != "following" %>
-      <%= link_to root_path, class: "shrink-0 px-3 py-1 rounded-full #{all_active ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}" do %><%= t('nav.all') %><% end %>
-      <%= link_to root_path(filter: "following"), class: "shrink-0 px-3 py-1 rounded-full #{following_active ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}" do %><%= t('nav.following_tab') %><% end %>
-      <% HobbyEntry.categories.each_key do |cat| %>
-        <%= link_to category_path(cat), class: "shrink-0 px-3 py-1 rounded-full #{params[:category] == cat ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}" do %>
-          <%= HobbyEntry::CATEGORY_ICONS[cat] %> <%= t("categories.#{cat}") %>
+    <div class="max-w-2xl mx-auto relative" data-controller="category-scroll">
+
+      <%# Left arrow %>
+      <button type="button"
+              data-category-scroll-target="prev"
+              data-action="click->category-scroll#scrollPrev"
+              class="hidden md:flex absolute left-0 top-0 bottom-2 z-10 items-center pl-2 pr-6
+                     bg-gradient-to-r from-white dark:from-gray-800 to-transparent
+                     opacity-0 pointer-events-none transition-opacity duration-150 cursor-pointer">
+        <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+
+      <%# Scrollable tab track %>
+      <div data-category-scroll-target="track"
+           class="px-4 pb-2 flex gap-1 overflow-x-auto scrollbar-hide text-sm">
+        <% following_active = request.path == root_path && params[:filter] == "following" %>
+        <% all_active = request.path == root_path && params[:filter] != "following" %>
+        <%= link_to root_path, class: "shrink-0 px-3 py-1 rounded-full #{all_active ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}" do %><%= t('nav.all') %><% end %>
+        <%= link_to root_path(filter: "following"), class: "shrink-0 px-3 py-1 rounded-full #{following_active ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}" do %><%= t('nav.following_tab') %><% end %>
+        <% HobbyEntry.categories.each_key do |cat| %>
+          <%= link_to category_path(cat), class: "shrink-0 px-3 py-1 rounded-full #{params[:category] == cat ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-medium' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'}" do %>
+            <%= HobbyEntry::CATEGORY_ICONS[cat] %> <%= t("categories.#{cat}") %>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
+
+      <%# Right arrow %>
+      <button type="button"
+              data-category-scroll-target="next"
+              data-action="click->category-scroll#scrollNext"
+              class="hidden md:flex absolute right-0 top-0 bottom-2 z-10 items-center pr-2 pl-6
+                     bg-gradient-to-l from-white dark:from-gray-800 to-transparent
+                     opacity-0 pointer-events-none transition-opacity duration-150 cursor-pointer">
+        <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+
     </div>
   <% end %>
 </nav>

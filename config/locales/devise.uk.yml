@@ -1,0 +1,36 @@
+uk:
+  devise:
+    failure:
+      already_authenticated: "Ви вже увійшли в систему."
+      inactive: "Ваш акаунт ще не активовано."
+      invalid: "Невірний %{authentication_keys} або пароль."
+      locked: "Ваш акаунт заблоковано."
+      last_attempt: "Залишилась одна спроба перед блокуванням акаунту."
+      not_found_in_database: "Невірний %{authentication_keys} або пароль."
+      timeout: "Сесія завершилась. Будь ласка, увійдіть знову."
+      unauthenticated: "Будь ласка, увійдіть для продовження."
+      unconfirmed: "Підтвердіть вашу email адресу перед продовженням."
+    omniauth_callbacks:
+      failure: "Не вдалось автентифікуватись через %{kind}: \"%{reason}\"."
+      success: "Успішно автентифіковано через %{kind}."
+    sessions:
+      signed_in: "Ви успішно увійшли."
+      signed_out: "Ви вийшли з системи."
+      already_signed_out: "Ви вийшли з системи."
+    registrations:
+      destroyed: "Акаунт успішно видалено."
+      signed_up: "Ласкаво просимо! Реєстрація пройшла успішно."
+      updated: "Акаунт успішно оновлено."
+    passwords:
+      send_instructions: "Ви отримаєте листа з інструкціями для відновлення паролю."
+      updated: "Пароль успішно змінено."
+    confirmations:
+      confirmed: "Email успішно підтверджено."
+      send_instructions: "Ви отримаєте листа з інструкціями для підтвердження email."
+  errors:
+    messages:
+      already_confirmed: "вже підтверджено, спробуйте увійти"
+      not_found: "не знайдено"
+      not_saved:
+        one: "1 помилка завадила зберегти %{resource}:"
+        other: "%{count} помилки завадили зберегти %{resource}:"

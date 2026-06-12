@@ -3,7 +3,7 @@
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-2">
       <%= link_to profile_path(entry.user) do %>
-        <img src="<%= entry.user.avatar_or_initials %>" class="w-9 h-9 rounded-full object-cover" alt="">
+        <img src="<%= user_avatar_url(entry.user) %>" class="w-9 h-9 rounded-full object-cover" alt="">
       <% end %>
       <div>
         <%= link_to entry.user.name, profile_path(entry.user), class: "font-semibold text-gray-900 dark:text-white text-sm hover:underline" %>
