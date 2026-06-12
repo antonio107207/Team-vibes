@@ -1,0 +1,147 @@
+<%= form_with model: entry, class: "space-y-4", multipart: true do |f| %>
+  <% if entry.errors.any? %>
+    <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
+      <% entry.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :category, t('entries.form.category_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+    <%= f.select :category,
+        HobbyEntry.categories.keys.map { |c| ["#{HobbyEntry::CATEGORY_ICONS[c]} #{t("categories.#{c}")}", c] },
+        { include_blank: t('entries.form.category_placeholder') },
+        class: "w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer" %>
+  </div>
+
+  <div>
+    <%= f.label :title, t('entries.form.title_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+    <%= f.text_field :title, placeholder: t('entries.form.title_placeholder'),
+        class: "w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500" %>
+  </div>
+
+  <div>
+    <%= f.label :description, t('entries.form.description_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+    <div data-controller="quill-editor">
+      <div data-quill-editor-target="editor"
+           data-placeholder="<%= t('entries.form.description_placeholder') %>"></div>
+      <%= f.hidden_field :description, data: { "quill-editor-target": "input" } %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :rating, t('entries.form.rating_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+    <div class="flex gap-2">
+      <% [1,2,3,4,5].each do |n| %>
+        <%= f.radio_button :rating, n, id: "rating_#{n}", class: "hidden peer/r#{n}" %>
+        <%= f.label "rating_#{n}", "★", class: "cursor-pointer text-2xl text-gray-300 dark:text-gray-600 peer-checked/r#{n}:text-yellow-400 hover:text-yellow-300 transition" %>
+      <% end %>
+    </div>
+  </div>
+
+  <%# Existing attachments (edit mode) %>
+  <% if entry.attachments.attached? %>
+    <%
+      exist_images    = entry.attachments.select { |a| a.content_type.start_with?("image/") }
+      exist_non_images = entry.attachments.reject { |a| a.content_type.start_with?("image/") }
+    %>
+    <div>
+      <p class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"><%= t('entries.form.current_files') %></p>
+
+      <div class="grid grid-cols-3 gap-2">
+
+        <%# Images — square thumbnails with hover-delete overlay %>
+        <% exist_images.each do |att| %>
+          <div class="relative group aspect-square rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700 transition-all"
+               data-controller="attachment-toggle">
+            <%= image_tag att,
+                  class: "w-full h-full object-cover",
+                  loading: "lazy" %>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <button type="button"
+                      data-action="click->attachment-toggle#toggle"
+                      class="bg-white/90 text-red-500 rounded-full w-9 h-9 flex items-center justify-center font-bold cursor-pointer hover:bg-white shadow text-sm"
+                      title="Видалити">✕</button>
+            </div>
+            <%= check_box_tag "hobby_entry[remove_attachment_ids][]", att.id, false,
+                  class: "hidden",
+                  data: { "attachment-toggle-target": "checkbox" } %>
+          </div>
+        <% end %>
+
+        <%# Audio %>
+        <% exist_non_images.select { |a| a.content_type.start_with?("audio/") }.each do |att| %>
+          <div class="col-span-3 bg-gray-50 dark:bg-gray-700 rounded-xl p-3 space-y-2 transition-all"
+               data-controller="attachment-toggle">
+            <div class="flex items-center gap-2">
+              <span class="shrink-0">🎵</span>
+              <span class="text-sm truncate text-gray-700 dark:text-gray-300 flex-1"><%= att.filename %></span>
+              <button type="button"
+                      data-action="click->attachment-toggle#toggle"
+                      class="shrink-0 text-red-400 hover:text-red-500 cursor-pointer font-bold text-sm leading-none"
+                      title="Видалити">✕</button>
+              <%= check_box_tag "hobby_entry[remove_attachment_ids][]", att.id, false,
+                    class: "hidden",
+                    data: { "attachment-toggle-target": "checkbox" } %>
+            </div>
+            <audio controls preload="none" class="w-full accent-indigo-600" style="height:36px">
+              <source src="<%= rails_blob_url(att) %>" type="<%= att.content_type %>">
+            </audio>
+          </div>
+        <% end %>
+
+        <%# Video %>
+        <% exist_non_images.select { |a| a.content_type.start_with?("video/") }.each do |att| %>
+          <div class="col-span-3 rounded-xl overflow-hidden bg-black transition-all"
+               data-controller="attachment-toggle">
+            <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700">
+              <span class="shrink-0">🎬</span>
+              <span class="text-sm truncate text-gray-700 dark:text-gray-300 flex-1"><%= att.filename %></span>
+              <button type="button"
+                      data-action="click->attachment-toggle#toggle"
+                      class="shrink-0 text-red-400 hover:text-red-500 cursor-pointer font-bold text-sm leading-none"
+                      title="Видалити">✕</button>
+              <%= check_box_tag "hobby_entry[remove_attachment_ids][]", att.id, false,
+                    class: "hidden",
+                    data: { "attachment-toggle-target": "checkbox" } %>
+            </div>
+            <video controls preload="none" class="w-full max-h-48">
+              <source src="<%= rails_blob_url(att) %>" type="<%= att.content_type %>">
+            </video>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  <% end %>
+
+  <%# New file upload with preview/cropper %>
+  <div data-controller="file-upload">
+    <p class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+      <%= entry.attachments.attached? ? t('entries.form.add_more') : t('entries.form.media') %>
+    </p>
+
+    <%# Hidden input managed by controller %>
+    <%= f.file_field :attachments, multiple: true,
+        accept: "image/jpeg,image/png,image/gif,image/webp,audio/mpeg,audio/ogg,audio/aac,audio/flac,audio/wav,video/mp4,video/webm,video/quicktime",
+        class: "hidden",
+        data: { "file-upload-target": "input", action: "change->file-upload#select" } %>
+
+    <%# Preview grid %>
+    <div data-file-upload-target="previews"></div>
+
+    <%# Drop zone button %>
+    <button type="button" data-action="click->file-upload#pick"
+      class="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-5 text-center hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer group">
+      <span class="text-2xl block mb-1 group-hover:scale-110 transition-transform">📎</span>
+      <span class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+        <%= t('entries.form.add_media') %>
+      </span>
+      <span class="text-xs block text-gray-400 dark:text-gray-500 mt-0.5"><%= t('entries.form.max_size') %></span>
+    </button>
+  </div>
+
+  <%= f.submit entry.new_record? ? t('entries.form.submit_new') : t('entries.form.submit_edit'),
+      class: "w-full bg-indigo-600 text-white font-medium py-2.5 rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
+<% end %>

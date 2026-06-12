@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: -apple-system, sans-serif; background: #f8fafc; margin: 0; padding: 20px; }
+    .container { max-width: 520px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; }
+    .header { background: #6366f1; padding: 24px; text-align: center; color: white; }
+    .header h1 { margin: 0; font-size: 22px; }
+    .header p { margin: 4px 0 0; opacity: 0.85; font-size: 14px; }
+    .content { padding: 20px; }
+    .entry { border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .entry-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; }
+    .author { font-size: 13px; font-weight: 600; color: #374151; }
+    .category { font-size: 12px; color: #9ca3af; }
+    .title { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 4px; }
+    .desc { font-size: 13px; color: #6b7280; }
+    .footer { padding: 16px 20px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #f3f4f6; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✨ Team Vibes</h1>
+      <p>Що нового за <%= @week_start %>–<%= @week_end %></p>
+    </div>
+    <div class="content">
+      <p style="color:#374151;font-size:14px;margin-top:0">Привіт, <%= @user.name %>! Ось що додали колеги цього тижня:</p>
+
+      <% @entries.each do |entry| %>
+        <div class="entry">
+          <div class="entry-meta">
+            <img src="<%= entry.user.avatar_or_initials %>" class="avatar" alt="">
+            <div>
+              <div class="author"><%= entry.user.name %></div>
+              <div class="category"><%= entry.category_icon %> <%= entry.category.capitalize %></div>
+            </div>
+          </div>
+          <div class="title"><%= entry.title %></div>
+          <% if entry.description.present? %>
+            <div class="desc"><%= truncate(entry.description, length: 120) %></div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="footer">
+      Team Vibes · Brind Drones · <a href="<%= root_url %>" style="color:#6366f1">Відкрити сайт</a>
+    </div>
+  </div>
+</body>
+</html>

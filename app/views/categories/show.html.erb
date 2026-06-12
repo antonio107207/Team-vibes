@@ -1,0 +1,16 @@
+<h1 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
+  <%= HobbyEntry::CATEGORY_ICONS[@category] %> <%= t("categories.#{@category}") %>
+</h1>
+
+<div class="space-y-4">
+  <% if @entries.empty? %>
+    <div class="text-center py-12 text-gray-400 dark:text-gray-500">
+      <p class="text-sm"><%= t('categories.empty') %></p>
+    </div>
+  <% else %>
+    <% @entries.each do |entry| %>
+      <%= render "shared/entry_card", entry: entry %>
+    <% end %>
+    <%= paginate @entries %>
+  <% end %>
+</div>

@@ -1,0 +1,8 @@
+<div id="follow_counts_<%= user.id %>" class="flex gap-4 mt-2">
+  <span class="text-xs text-gray-500 dark:text-gray-400">
+    <span class="font-semibold text-gray-900 dark:text-white"><%= user.followers.size %></span> <%= t('profiles.followers_label') %>
+  </span>
+  <span class="text-xs text-gray-500 dark:text-gray-400">
+    <span class="font-semibold text-gray-900 dark:text-white"><%= user.followees.size %></span> <%= t('profiles.followees_label') %>
+  </span>
+</div>

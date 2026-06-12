@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" class="">
+  <head>
+    <title><%= content_for(:title) || "Team Vibes" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Team Vibes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6366f1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta name="turbo-refresh-method" content="morph">
+    <meta name="turbo-refresh-scroll" content="preserve">
+    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+      .flatpickr-calendar {
+        background: #fff; border: 1px solid #e5e7eb; border-radius: .75rem;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,.12), 0 4px 6px -2px rgba(0,0,0,.06);
+        font-family: inherit;
+      }
+      .flatpickr-calendar.arrowTop:before { border-bottom-color: #e5e7eb; }
+      .flatpickr-calendar.arrowTop:after  { border-bottom-color: #fff; }
+      .flatpickr-months { padding: .4rem .4rem 0; }
+      .flatpickr-month, .flatpickr-current-month .flatpickr-monthDropdown-months,
+      .flatpickr-current-month input.cur-year { color: #111827; font-weight: 600; }
+      .flatpickr-weekday { color: #9ca3af; font-size: .7rem; font-weight: 500; }
+      .flatpickr-day { color: #374151; border-radius: .375rem; }
+      .flatpickr-day:hover:not(.selected):not(.startRange):not(.endRange) { background: #e0e7ff; border-color: #e0e7ff; color: #3730a3; }
+      .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange,
+      .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover
+        { background: #4f46e5; border-color: #4f46e5; color: #fff; }
+      .flatpickr-day.inRange { background: #e0e7ff; border-color: #e0e7ff; color: #3730a3;
+        box-shadow: -5px 0 0 #e0e7ff, 5px 0 0 #e0e7ff; }
+      .flatpickr-day.today { border-color: #a5b4fc; }
+      .flatpickr-day.today:hover { background: #e0e7ff; border-color: #a5b4fc; }
+      .flatpickr-prev-month svg, .flatpickr-next-month svg { fill: #6b7280; }
+      .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg { fill: #4f46e5; }
+
+      html.dark .flatpickr-calendar {
+        background: #1f2937; border-color: #374151;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,.5);
+      }
+      html.dark .flatpickr-calendar.arrowTop:before { border-bottom-color: #374151; }
+      html.dark .flatpickr-calendar.arrowTop:after  { border-bottom-color: #1f2937; }
+      html.dark .flatpickr-month,
+      html.dark .flatpickr-current-month .flatpickr-monthDropdown-months,
+      html.dark .flatpickr-current-month input.cur-year { color: #f3f4f6; }
+      html.dark .flatpickr-weekday { color: #6b7280; }
+      html.dark .flatpickr-day { color: #d1d5db; }
+      html.dark .flatpickr-day:hover:not(.selected):not(.startRange):not(.endRange)
+        { background: #374151; border-color: #374151; color: #f3f4f6; }
+      html.dark .flatpickr-day.flatpickr-disabled { color: #4b5563; }
+      html.dark .flatpickr-day.selected, html.dark .flatpickr-day.startRange, html.dark .flatpickr-day.endRange,
+      html.dark .flatpickr-day.selected:hover, html.dark .flatpickr-day.startRange:hover, html.dark .flatpickr-day.endRange:hover
+        { background: #4f46e5; border-color: #4f46e5; color: #fff; }
+      html.dark .flatpickr-day.inRange {
+        background: rgba(79,70,229,.25); border-color: transparent; color: #a5b4fc;
+        box-shadow: -5px 0 0 rgba(79,70,229,.25), 5px 0 0 rgba(79,70,229,.25);
+      }
+      html.dark .flatpickr-day.today { border-color: #6366f1; }
+      html.dark .flatpickr-prev-month svg, html.dark .flatpickr-next-month svg { fill: #9ca3af; }
+      html.dark .flatpickr-prev-month:hover svg, html.dark .flatpickr-next-month:hover svg { fill: #a5b4fc; }
+      html.dark .numInputWrapper:hover { background: #374151; }
+      html.dark .flatpickr-current-month .numInputWrapper span.arrowUp:after  { border-bottom-color: #9ca3af; }
+      html.dark .flatpickr-current-month .numInputWrapper span.arrowDown:after { border-top-color:    #9ca3af; }
+      html.dark .flatpickr-monthDropdown-months { background: #1f2937; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <% if I18n.locale.to_s == "uk" %>
+      <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/uk.js"></script>
+    <% end %>
+    <script>
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      }
+    </script>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200" data-controller="theme">
+    <%= render "layouts/navbar" %>
+
+    <% if notice %>
+      <div class="max-w-2xl mx-auto px-4 pt-4">
+        <div class="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 text-green-800 dark:text-green-300 rounded-lg px-4 py-3 text-sm">
+          <%= notice %>
+        </div>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="max-w-2xl mx-auto px-4 pt-4">
+        <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-300 rounded-lg px-4 py-3 text-sm">
+          <%= alert %>
+        </div>
+      </div>
+    <% end %>
+
+    <main class="max-w-2xl mx-auto px-4 py-6">
+      <%= yield %>
+    </main>
+  </body>
+</html>

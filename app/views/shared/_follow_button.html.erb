@@ -1,0 +1,18 @@
+<% following = current_user.following?(user) %>
+<div id="follow_<%= user.id %>">
+  <% if following %>
+    <%= button_to profile_follow_path(user),
+        method: :delete,
+        data: { turbo_stream: true },
+        class: "px-4 py-1.5 rounded-lg text-sm font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-red-400 hover:text-red-500 dark:hover:text-red-400 bg-transparent cursor-pointer transition" do %>
+      <%= t('follows.unfollow') %>
+    <% end %>
+  <% else %>
+    <%= button_to profile_follow_path(user),
+        method: :post,
+        data: { turbo_stream: true },
+        class: "px-4 py-1.5 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer transition" do %>
+      <%= t('follows.follow') %>
+    <% end %>
+  <% end %>
+</div>

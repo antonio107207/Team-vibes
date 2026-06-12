@@ -1,0 +1,16 @@
+<% liked = entry.liked_by?(current_user) %>
+<% if liked %>
+  <%= button_to hobby_entry_like_path(entry, entry.likes.find_by(user: current_user)),
+      method: :delete,
+      data: { turbo_stream: true },
+      class: "flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-medium text-sm bg-transparent border-0 p-0 cursor-pointer hover:text-indigo-800 dark:hover:text-indigo-300 transition" do %>
+    ❤️ <span><%= entry.likes.size %></span>
+  <% end %>
+<% else %>
+  <%= button_to hobby_entry_likes_path(entry),
+      method: :post,
+      data: { turbo_stream: true },
+      class: "flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-sm bg-transparent border-0 p-0 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition" do %>
+    🤍 <span><%= entry.likes.size %></span>
+  <% end %>
+<% end %>

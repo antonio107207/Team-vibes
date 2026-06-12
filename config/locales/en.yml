@@ -1,0 +1,122 @@
+en:
+  nav:
+    app_name: "Team Vibes"
+    add: "+ Add"
+    all: "All"
+    following_tab: "👥 Following"
+    edit_profile: "Edit profile"
+    favorites: "Favorites"
+    following: "Following"
+    sign_out: "Sign out"
+    toggle_theme: "Toggle theme"
+
+  feed:
+    all_members: "👥 All members"
+    any_date: "Any date"
+    reset_dates: "Clear dates"
+    newest: "Newest"
+    oldest: "Oldest"
+    reset_filters: "✕ reset"
+    empty_title: "Nothing here yet"
+    empty_subtitle: "Be the first — share your hobby!"
+    add_entry: "+ Add entry"
+
+  entry_card:
+    ago: "ago"
+    delete_confirm: "Delete this entry?"
+
+  entries:
+    new_title: "New entry"
+    edit_title: "Edit entry"
+    added: "Entry added!"
+    updated: "Entry updated!"
+    deleted: "Entry deleted."
+    access_denied: "Access denied."
+    form:
+      category_label: "Category"
+      category_placeholder: "Choose a category"
+      title_label: "Title"
+      title_placeholder: "e.g. Dune, The Last of Us..."
+      description_label: "Description (optional)"
+      description_placeholder: "What's special? Why do you recommend it?"
+      rating_label: "Rating (optional)"
+      current_files: "Current files"
+      add_more: "Add more files"
+      media: "Media (optional)"
+      add_media: "Add photo, audio or video"
+      max_size: "up to 50 MB per file"
+      submit_new: "Add ✨"
+      submit_edit: "Save"
+
+  show_entry:
+    photos_hint_many: "%{count} photos · click to view"
+    photos_hint_one: "click to view"
+    comments_title: "Comments (%{count})"
+    comment_placeholder: "Write a comment..."
+
+  comments:
+    delete_confirm: "Delete comment?"
+    empty_error: "Comment can't be blank."
+
+  profiles:
+    edit_link: "Edit"
+    entries_count:
+      one: "1 entry"
+      other: "%{count} entries"
+    followers_label: "followers"
+    followees_label: "following"
+    no_entries: "No entries yet"
+    updated: "Profile updated!"
+    edit:
+      title: "Edit profile"
+      avatar_label: "Avatar URL"
+      name_label: "Name"
+      position_label: "Position"
+      position_placeholder: "Backend Developer, Designer..."
+      bio_label: "About"
+      bio_placeholder: "A few words about yourself..."
+      submit: "Save"
+
+  favorites:
+    title: "Favorites"
+    count:
+      one: "1 saved entry"
+      other: "%{count} saved entries"
+    empty_title: "Nothing saved yet"
+    empty_subtitle: "Click the bookmark under any post"
+    back: "← Back to feed"
+    add_tooltip: "Save"
+    remove_tooltip: "Remove from saved"
+
+  follows:
+    title: "Following"
+    count:
+      one: "1 user"
+      other: "%{count} users"
+    empty_title: "You're not following anyone yet"
+    empty_subtitle: "Follow teammates to track their posts"
+    back: "← Back to feed"
+    follow: "Follow"
+    unfollow: "Unfollow"
+    entries_count:
+      one: "1 entry"
+      other: "%{count} entries"
+
+  categories:
+    not_found: "Category not found."
+    empty: "No entries in this category yet"
+    movies: "Movies"
+    music: "Music"
+    games: "Games"
+    pets: "Pets"
+    books: "Books"
+    sports: "Sports"
+    travel: "Travel"
+    food: "Food"
+    other: "Other"
+
+  auth:
+    sign_in_subtitle: "Hobbies and interests of your team"
+    sign_in_with_google: "Sign in with Google"
+    domain_hint: "For @brincdrones.com accounts only"
+    failure: "Authorization failed. Please try again."

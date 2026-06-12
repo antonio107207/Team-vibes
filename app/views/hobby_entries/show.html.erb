@@ -1,0 +1,98 @@
+<div class="space-y-4">
+  <%= render "shared/entry_card", entry: @entry, hide_media: true, clamp: false %>
+
+  <% if @entry.attachments.attached? %>
+    <%
+      images  = @entry.attachments.select { |a| a.content_type.start_with?("image/") }
+      audios  = @entry.attachments.select { |a| a.content_type.start_with?("audio/") }
+      videos  = @entry.attachments.select { |a| a.content_type.start_with?("video/") }
+      n = images.size
+      grid_cols = case n when 1 then "grid-cols-1" when 2 then "grid-cols-2" when 3 then "grid-cols-3" else "grid-cols-3" end
+      cell_aspect = n == 1 ? "aspect-video max-h-96" : "aspect-square"
+    %>
+
+    <%# Image gallery with lightbox %>
+    <% if images.any? %>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden"
+           data-controller="lightbox">
+
+        <div class="grid gap-0.5 <%= grid_cols %>">
+          <% images.each_with_index do |img, i| %>
+            <div class="relative bg-gray-100 dark:bg-gray-700 overflow-hidden cursor-zoom-in group <%= cell_aspect %>"
+                 data-lightbox-target="thumb"
+                 data-src="<%= rails_blob_url(img) %>"
+                 data-index="<%= i %>"
+                 data-action="click->lightbox#open">
+              <%= image_tag img,
+                    class: "w-full h-full object-cover transition-transform duration-300 group-hover:scale-105",
+                    loading: i < 4 ? "eager" : "lazy",
+                    alt: @entry.title %>
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+            </div>
+          <% end %>
+        </div>
+
+        <% if images.size > 1 %>
+          <p class="text-xs text-gray-400 dark:text-gray-500 text-center py-2 select-none">
+            <%= t('show_entry.photos_hint_many', count: images.size) %>
+          </p>
+        <% elsif images.size == 1 %>
+          <p class="text-xs text-gray-400 dark:text-gray-500 text-center py-2 select-none">
+            <%= t('show_entry.photos_hint_one') %>
+          </p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%# Audio & video %>
+    <% if audios.any? || videos.any? %>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 space-y-3 transition-colors duration-200">
+
+        <% audios.each do |att| %>
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl px-3 py-2.5">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 truncate flex items-center gap-1.5">
+              <span>🎵</span><span><%= att.filename %></span>
+            </p>
+            <audio controls class="w-full accent-indigo-600" style="height:40px">
+              <source src="<%= rails_blob_url(att) %>" type="<%= att.content_type %>">
+            </audio>
+          </div>
+        <% end %>
+
+        <% videos.each do |att| %>
+          <div class="rounded-xl overflow-hidden bg-black">
+            <div class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700">
+              <span class="text-sm shrink-0">🎬</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400 truncate"><%= att.filename %></span>
+            </div>
+            <video controls preload="metadata" class="w-full max-h-80">
+              <source src="<%= rails_blob_url(att) %>" type="<%= att.content_type %>">
+            </video>
+          </div>
+        <% end %>
+
+      </div>
+    <% end %>
+  <% end %>
+
+  <%# Comments %>
+  <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 transition-colors duration-200">
+    <h2 class="font-semibold text-gray-800 dark:text-white mb-4"><%= t('show_entry.comments_title', count: @comments.size) %></h2>
+
+    <div id="comments_<%= @entry.id %>" class="space-y-3 mb-4">
+      <%= render @comments %>
+    </div>
+
+    <%= form_with model: [@entry, @comment], id: "new_comment_form", data: { turbo_stream: true } do |f| %>
+      <div class="flex gap-2">
+        <img src="<%= current_user.avatar_or_initials %>" class="w-8 h-8 rounded-full object-cover shrink-0 mt-0.5" alt="">
+        <div class="flex-1 flex gap-2">
+          <%= f.text_field :body, placeholder: t('show_entry.comment_placeholder'),
+              class: "flex-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500",
+              autocomplete: "off" %>
+          <%= f.submit "→", class: "bg-indigo-600 text-white px-4 rounded-lg hover:bg-indigo-700 transition cursor-pointer text-sm font-bold" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

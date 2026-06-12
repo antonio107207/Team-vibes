@@ -1,0 +1,189 @@
+uk:
+  nav:
+    app_name: "Team Vibes"
+    add: "+ Додати"
+    all: "Всі"
+    following_tab: "👥 Підписки"
+    edit_profile: "Редагувати профіль"
+    favorites: "Улюблене"
+    following: "Підписки"
+    sign_out: "Вийти"
+    toggle_theme: "Перемкнути тему"
+
+  feed:
+    all_members: "👥 Всі учасники"
+    any_date: "Будь-яка дата"
+    reset_dates: "Скинути дати"
+    newest: "Нові"
+    oldest: "Старі"
+    reset_filters: "✕ скинути"
+    empty_title: "Поки що тут нічого немає"
+    empty_subtitle: "Будьте першим — додайте своє хобі!"
+    add_entry: "+ Додати запис"
+
+  entry_card:
+    ago: "тому"
+    delete_confirm: "Видалити цей запис?"
+
+  entries:
+    new_title: "Новий запис"
+    edit_title: "Редагувати запис"
+    added: "Запис додано!"
+    updated: "Запис оновлено!"
+    deleted: "Запис видалено."
+    access_denied: "Немає доступу."
+    form:
+      category_label: "Категорія"
+      category_placeholder: "Оберіть категорію"
+      title_label: "Назва"
+      title_placeholder: "Наприклад: Dune, The Last of Us..."
+      description_label: "Опис (необов'язково)"
+      description_placeholder: "Що особливого? Чому радиш?"
+      rating_label: "Оцінка (необов'язково)"
+      current_files: "Поточні файли"
+      add_more: "Додати ще файли"
+      media: "Медіафайли (необов'язково)"
+      add_media: "Додати фото, аудіо або відео"
+      max_size: "до 50 МБ на файл"
+      submit_new: "Додати ✨"
+      submit_edit: "Зберегти"
+
+  show_entry:
+    photos_hint_many: "%{count} фото · натисніть для перегляду"
+    photos_hint_one: "натисніть для перегляду"
+    comments_title: "Коментарі (%{count})"
+    comment_placeholder: "Напишіть коментар..."
+
+  comments:
+    delete_confirm: "Видалити коментар?"
+    empty_error: "Коментар не може бути порожнім."
+
+  profiles:
+    edit_link: "Редагувати"
+    entries_count:
+      one: "1 запис"
+      few: "%{count} записи"
+      many: "%{count} записів"
+      other: "%{count} записів"
+    followers_label: "підписників"
+    followees_label: "підписок"
+    no_entries: "Поки що немає записів"
+    updated: "Профіль оновлено!"
+    edit:
+      title: "Редагувати профіль"
+      avatar_label: "URL аватара"
+      name_label: "Ім'я"
+      position_label: "Посада"
+      position_placeholder: "Backend Developer, Designer..."
+      bio_label: "Про себе"
+      bio_placeholder: "Кілька слів про себе..."
+      submit: "Зберегти"
+
+  favorites:
+    title: "Улюблене"
+    count:
+      one: "1 збережений запис"
+      few: "%{count} збережені записи"
+      many: "%{count} збережених записів"
+      other: "%{count} збережених записів"
+    empty_title: "Ще нічого не збережено"
+    empty_subtitle: "Натисніть на закладку під будь-яким постом"
+    back: "← До стрічки"
+    add_tooltip: "Зберегти в улюблене"
+    remove_tooltip: "Прибрати з улюбленого"
+
+  follows:
+    title: "Підписки"
+    count:
+      one: "1 користувач"
+      few: "%{count} користувачі"
+      many: "%{count} користувачів"
+      other: "%{count} користувачів"
+    empty_title: "Ви ще ні на кого не підписані"
+    empty_subtitle: "Підпишіться на колег, щоб стежити за їхніми постами"
+    back: "← До стрічки"
+    follow: "Підписатись"
+    unfollow: "Відписатись"
+    entries_count:
+      one: "1 запис"
+      few: "%{count} записи"
+      many: "%{count} записів"
+      other: "%{count} записів"
+
+  categories:
+    not_found: "Категорія не знайдена."
+    empty: "Записів у цій категорії ще немає"
+    movies: "Фільми"
+    music: "Музика"
+    games: "Ігри"
+    pets: "Тварини"
+    books: "Книги"
+    sports: "Спорт"
+    travel: "Подорожі"
+    food: "Їжа"
+    other: "Інше"
+
+  auth:
+    sign_in_subtitle: "Хобі та захоплення вашої команди"
+    sign_in_with_google: "Увійти через Google"
+    domain_hint: "Тільки для @brincdrones.com акаунтів"
+    failure: "Авторизація не вдалась. Спробуйте ще раз."
+
+  datetime:
+    distance_in_words:
+      half_a_minute: "півхвилини"
+      less_than_x_seconds:
+        one: "менше секунди"
+        few: "менше %{count} секунд"
+        many: "менше %{count} секунд"
+        other: "менше %{count} секунди"
+      x_seconds:
+        one: "%{count} секунда"
+        few: "%{count} секунди"
+        many: "%{count} секунд"
+        other: "%{count} секунди"
+      less_than_x_minutes:
+        one: "менше хвилини"
+        few: "менше %{count} хвилин"
+        many: "менше %{count} хвилин"
+        other: "менше %{count} хвилин"
+      x_minutes:
+        one: "%{count} хвилина"
+        few: "%{count} хвилини"
+        many: "%{count} хвилин"
+        other: "%{count} хвилини"
+      about_x_hours:
+        one: "близько години"
+        few: "близько %{count} годин"
+        many: "близько %{count} годин"
+        other: "близько %{count} годин"
+      x_days:
+        one: "%{count} день"
+        few: "%{count} дні"
+        many: "%{count} днів"
+        other: "%{count} днів"
+      about_x_months:
+        one: "близько місяця"
+        few: "близько %{count} місяців"
+        many: "близько %{count} місяців"
+        other: "близько %{count} місяців"
+      x_months:
+        one: "%{count} місяць"
+        few: "%{count} місяці"
+        many: "%{count} місяців"
+        other: "%{count} місяців"
+      about_x_years:
+        one: "близько року"
+        few: "близько %{count} років"
+        many: "близько %{count} років"
+        other: "близько %{count} років"
+      over_x_years:
+        one: "більше року"
+        few: "більше %{count} років"
+        many: "більше %{count} років"
+        other: "більше %{count} років"
+      almost_x_years:
+        one: "майже рік"
+        few: "майже %{count} роки"
+        many: "майже %{count} років"
+        other: "майже %{count} роки"

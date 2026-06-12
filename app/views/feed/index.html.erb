@@ -1,0 +1,76 @@
+<%= turbo_stream_from "feed" %>
+
+<%# Filter / sort bar — marked permanent so morphing doesn't reset the date picker %>
+<%= form_with url: root_path, method: :get,
+    data: { turbo_action: "advance", turbo_permanent: true },
+    id: "feed_filters",
+    class: "flex flex-wrap gap-2 items-center mb-4" do |f| %>
+  <div class="relative">
+    <%= f.select :user_id,
+      options_for_select([[t('feed.all_members'), ""]] + @users.map { |u| [u.name, u.id] }, params[:user_id].to_s),
+      {},
+      class: "appearance-none bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg pl-3 pr-8 py-1.5 text-sm text-gray-700 dark:text-gray-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500",
+      onchange: "this.form.requestSubmit()" %>
+    <div class="pointer-events-none absolute inset-y-0 right-2 flex items-center text-gray-400">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+  </div>
+
+  <div data-controller="date-range-picker"
+       data-date-range-picker-locale-value="<%= I18n.locale %>"
+       class="relative flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg pl-3 pr-8 py-1.5 text-sm">
+    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+    </svg>
+    <input data-date-range-picker-target="display" type="text" readonly
+           placeholder="<%= t('feed.any_date') %>"
+           class="bg-transparent text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 cursor-pointer focus:outline-none w-52 select-none">
+    <input type="hidden" name="from" data-date-range-picker-target="from" value="<%= params[:from] %>">
+    <input type="hidden" name="to"   data-date-range-picker-target="to"   value="<%= params[:to] %>">
+    <button type="button" data-action="click->date-range-picker#clear"
+            title="<%= t('feed.reset_dates') %>"
+            class="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer transition-opacity
+                   <%= params[:from].present? || params[:to].present? ? 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300' : 'invisible' %>">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-sm">
+    <% [["feed.newest", "newest"], ["feed.oldest", "oldest"]].each do |key, value| %>
+      <% active = (params[:sort].presence || "newest") == value %>
+      <button type="submit" name="sort" value="<%= value %>"
+              class="w-16 text-center py-1.5 cursor-pointer transition-colors
+                     <%= active ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700' %>">
+        <%= t(key) %>
+      </button>
+    <% end %>
+  </div>
+
+  <% if params[:user_id].present? || params[:sort].present? || params[:from].present? || params[:to].present? %>
+    <%= link_to root_path, class: "text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition" do %>
+      <%= t('feed.reset_filters') %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%# Feed %>
+<div id="feed_entries" class="space-y-4">
+  <% if @entries.empty? %>
+    <div class="text-center py-16 text-gray-400 dark:text-gray-500">
+      <p class="text-4xl mb-3">✨</p>
+      <p class="font-medium text-gray-600 dark:text-gray-300"><%= t('feed.empty_title') %></p>
+      <p class="text-sm mt-1"><%= t('feed.empty_subtitle') %></p>
+      <%= link_to t('feed.add_entry'), new_hobby_entry_path, class: "mt-4 inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition" %>
+    </div>
+  <% else %>
+    <% @entries.each do |entry| %>
+      <%= render "shared/entry_card", entry: entry %>
+    <% end %>
+    <%= paginate @entries %>
+  <% end %>
+</div>

@@ -1,0 +1,45 @@
+<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5 mb-4 transition-colors duration-200">
+  <div class="flex items-start gap-4">
+    <img src="<%= @user.avatar_or_initials %>" class="w-16 h-16 rounded-full object-cover" alt="">
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between gap-2">
+        <h1 class="text-lg font-bold text-gray-900 dark:text-white truncate"><%= @user.name %></h1>
+        <% if @user == current_user %>
+          <%= link_to t('profiles.edit_link'), edit_profile_path(@user), class: "shrink-0 text-sm text-indigo-600 dark:text-indigo-400 hover:underline" %>
+        <% else %>
+          <%= render "shared/follow_button", user: @user %>
+        <% end %>
+      </div>
+      <% if @user.position.present? %>
+        <p class="text-sm text-indigo-600 dark:text-indigo-400 font-medium"><%= @user.position %></p>
+      <% end %>
+      <% if @user.bio.present? %>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1"><%= @user.bio %></p>
+      <% end %>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2">
+        <span class="text-xs text-gray-400 dark:text-gray-500"><%= t('profiles.entries_count', count: @entries.size) %></span>
+        <%= render "profiles/follow_counts", user: @user %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if @entries_by_category.empty? %>
+  <div class="text-center py-12 text-gray-400 dark:text-gray-500">
+    <p class="text-3xl mb-2">🌱</p>
+    <p class="text-sm"><%= t('profiles.no_entries') %></p>
+  </div>
+<% else %>
+  <% @entries_by_category.each do |category, entries| %>
+    <div class="mb-5">
+      <h2 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2 px-1">
+        <%= HobbyEntry::CATEGORY_ICONS[category] %> <%= t("categories.#{category}") %>
+      </h2>
+      <div class="space-y-3">
+        <% entries.each do |entry| %>
+          <%= render "shared/entry_card", entry: entry %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

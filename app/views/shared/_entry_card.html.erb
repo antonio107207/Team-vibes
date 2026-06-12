@@ -1,0 +1,107 @@
+<div id="<%= dom_id(entry) %>" class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 space-y-3 transition-colors duration-200">
+  <%# Header %>
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <%= link_to profile_path(entry.user) do %>
+        <img src="<%= entry.user.avatar_or_initials %>" class="w-9 h-9 rounded-full object-cover" alt="">
+      <% end %>
+      <div>
+        <%= link_to entry.user.name, profile_path(entry.user), class: "font-semibold text-gray-900 dark:text-white text-sm hover:underline" %>
+        <p class="text-xs text-gray-400 dark:text-gray-500">
+          <%= entry.created_at.strftime("%-d.%m.%Y") %>
+          <span class="opacity-40 mx-0.5">·</span>
+          <%= time_ago_in_words(entry.created_at) %> <%= t('entry_card.ago') %>
+        </p>
+      </div>
+    </div>
+    <span class="text-xl" title="<%= t("categories.#{entry.category}") %>"><%= entry.category_icon %></span>
+  </div>
+
+  <%# Content %>
+  <%= link_to hobby_entry_path(entry), class: "block group" do %>
+    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition"><%= entry.title %></h3>
+    <% if entry.description.present? %>
+      <% clamp ||= true %>
+      <div class="ql-content text-sm text-gray-600 dark:text-gray-300 mt-1 <%= clamp ? 'line-clamp-3' : '' %>">
+        <%= sanitize entry.description %>
+      </div>
+    <% end %>
+  <% end %>
+  <% if entry.description.present? %>
+    <% preview_url = entry.description[/href="(https?:\/\/[^"]+)"/, 1] || entry.description[/https?:\/\/[^\s"<>]+/] %>
+    <% if preview_url %>
+      <div data-controller="link-preview" data-link-preview-url-value="<%= preview_url %>"></div>
+    <% end %>
+  <% end %>
+
+  <% if entry.rating %>
+    <div class="flex gap-0.5">
+      <% 5.times do |i| %>
+        <span class="<%= i < entry.rating ? 'text-yellow-400' : 'text-gray-200 dark:text-gray-600' %> text-sm">★</span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# Attachments preview %>
+  <% hide_media ||= false %>
+  <% if !hide_media && entry.attachments.attached? %>
+    <% images = entry.attachments.select { |a| a.content_type.start_with?("image/") } %>
+    <% non_images = entry.attachments.reject { |a| a.content_type.start_with?("image/") } %>
+    <% if images.any? %>
+      <div class="grid <%= images.size == 1 ? 'grid-cols-1' : 'grid-cols-2' %> gap-1 rounded-xl overflow-hidden">
+        <% images.first(4).each_with_index do |img, i| %>
+          <% is_last = i == 3 && images.size > 4 %>
+          <div class="relative <%= images.size == 1 ? 'max-h-64' : 'h-32' %> bg-gray-100 dark:bg-gray-700 overflow-hidden">
+            <%= image_tag img, class: "w-full h-full object-cover", loading: "lazy" %>
+            <% if is_last %>
+              <%= link_to hobby_entry_path(entry), class: "absolute inset-0 bg-black/50 flex items-center justify-center text-white font-semibold text-lg" do %>
+                +<%= images.size - 4 %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    <% if non_images.any? %>
+      <div class="space-y-1">
+        <% non_images.first(3).each do |att| %>
+          <% if att.content_type.start_with?("audio/") %>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate">🎵 <%= att.filename %></p>
+              <audio controls preload="none" class="w-full h-8 accent-indigo-600">
+                <source src="<%= rails_blob_url(att) %>" type="<%= att.content_type %>">
+              </audio>
+            </div>
+          <% elsif att.content_type.start_with?("video/") %>
+            <video controls preload="none" class="w-full rounded-lg max-h-48 bg-black">
+              <source src="<%= rails_blob_url(att) %>" type="<%= att.content_type %>">
+            </video>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%# Actions %>
+  <div class="flex items-center gap-4 pt-1 border-t border-gray-50 dark:border-gray-700">
+    <div id="likes_<%= entry.id %>">
+      <%= render "shared/like_button", entry: entry %>
+    </div>
+
+    <%= link_to hobby_entry_path(entry), class: "flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 text-sm transition" do %>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+      <span><%= entry.comments.size %></span>
+    <% end %>
+
+    <div class="ml-auto flex items-center gap-3">
+      <div id="favorite_<%= entry.id %>">
+        <%= render "shared/favorite_button", entry: entry %>
+      </div>
+
+      <% if entry.user == current_user %>
+        <%= link_to "✏️", edit_hobby_entry_path(entry), class: "text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" %>
+        <%= button_to "🗑️", hobby_entry_path(entry), method: :delete, data: { turbo_confirm: t('entry_card.delete_confirm') }, class: "text-xs text-gray-400 dark:text-gray-500 hover:text-red-500 bg-transparent border-0 p-0 cursor-pointer" %>
+      <% end %>
+    </div>
+  </div>
+</div>

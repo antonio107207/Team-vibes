@@ -1,0 +1,31 @@
+<div class="mb-4">
+  <h1 class="text-lg font-bold text-gray-900 dark:text-white"><%= t('follows.title') %></h1>
+  <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('follows.count', count: @followees.size) %></p>
+</div>
+
+<% if @followees.empty? %>
+  <div class="text-center py-16 text-gray-400 dark:text-gray-500">
+    <p class="text-4xl mb-3">👥</p>
+    <p class="font-medium text-gray-600 dark:text-gray-300"><%= t('follows.empty_title') %></p>
+    <p class="text-sm mt-1"><%= t('follows.empty_subtitle') %></p>
+    <%= link_to t('follows.back'), root_path, class: "mt-4 inline-block text-indigo-600 dark:text-indigo-400 text-sm hover:underline" %>
+  </div>
+<% else %>
+  <div class="space-y-3">
+    <% @followees.each do |user| %>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm px-4 py-3 flex items-center gap-3 transition-colors">
+        <%= link_to profile_path(user) do %>
+          <img src="<%= user.avatar_or_initials %>" class="w-11 h-11 rounded-full object-cover flex-shrink-0" alt="">
+        <% end %>
+        <div class="flex-1 min-w-0">
+          <%= link_to user.name, profile_path(user), class: "font-semibold text-gray-900 dark:text-white text-sm hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate block" %>
+          <% if user.position.present? %>
+            <p class="text-xs text-indigo-600 dark:text-indigo-400 truncate"><%= user.position %></p>
+          <% end %>
+          <p class="text-xs text-gray-400 dark:text-gray-500"><%= t('follows.entries_count', count: user.hobby_entries.size) %></p>
+        </div>
+        <%= render "shared/follow_button", user: user %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

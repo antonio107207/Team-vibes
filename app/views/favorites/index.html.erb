@@ -1,0 +1,20 @@
+<div class="mb-4">
+  <h1 class="text-lg font-bold text-gray-900 dark:text-white"><%= t('favorites.title') %></h1>
+  <p class="text-sm text-gray-500 dark:text-gray-400"><%= t('favorites.count', count: @entries.total_count) %></p>
+</div>
+
+<% if @entries.empty? %>
+  <div class="text-center py-16 text-gray-400 dark:text-gray-500">
+    <p class="text-4xl mb-3">🔖</p>
+    <p class="font-medium text-gray-600 dark:text-gray-300"><%= t('favorites.empty_title') %></p>
+    <p class="text-sm mt-1"><%= t('favorites.empty_subtitle') %></p>
+    <%= link_to t('favorites.back'), root_path, class: "mt-4 inline-block text-indigo-600 dark:text-indigo-400 text-sm hover:underline" %>
+  </div>
+<% else %>
+  <div class="space-y-4">
+    <% @entries.each do |entry| %>
+      <%= render "shared/entry_card", entry: entry %>
+    <% end %>
+    <%= paginate @entries %>
+  </div>
+<% end %>

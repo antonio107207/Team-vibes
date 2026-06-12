@@ -1,0 +1,39 @@
+<div class="max-w-lg mx-auto">
+  <h1 class="text-xl font-bold text-gray-900 dark:text-white mb-6"><%= t('profiles.edit.title') %></h1>
+
+  <%= form_with model: current_user, url: profile_path(current_user), method: :patch, class: "space-y-4" do |f| %>
+    <% if current_user.errors.any? %>
+      <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
+        <% current_user.errors.full_messages.each do |msg| %><p><%= msg %></p><% end %>
+      </div>
+    <% end %>
+
+    <div class="flex items-center gap-4 mb-2">
+      <img src="<%= current_user.avatar_or_initials %>" class="w-14 h-14 rounded-full object-cover" alt="">
+      <div class="flex-1">
+        <%= f.label :avatar_url, t('profiles.edit.avatar_label'), class: "block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" %>
+        <%= f.url_field :avatar_url, placeholder: "https://...",
+            class: "w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500" %>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :name, t('profiles.edit.name_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+      <%= f.text_field :name, class: "w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent" %>
+    </div>
+
+    <div>
+      <%= f.label :position, t('profiles.edit.position_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+      <%= f.text_field :position, placeholder: t('profiles.edit.position_placeholder'),
+          class: "w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500" %>
+    </div>
+
+    <div>
+      <%= f.label :bio, t('profiles.edit.bio_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+      <%= f.text_area :bio, rows: 3, placeholder: t('profiles.edit.bio_placeholder'),
+          class: "w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none placeholder-gray-400 dark:placeholder-gray-500" %>
+    </div>
+
+    <%= f.submit t('profiles.edit.submit'), class: "w-full bg-indigo-600 text-white font-medium py-2.5 rounded-lg hover:bg-indigo-700 transition cursor-pointer" %>
+  <% end %>
+</div>
