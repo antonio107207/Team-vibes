@@ -13,7 +13,7 @@ class ProfilesController < ApplicationController
   def update
     redirect_to root_path unless @user == current_user
     if current_user.update(profile_params)
-      redirect_to profile_path(current_user), notice: t('profiles.updated')
+      redirect_to profile_path(current_user), notice: t("profiles.updated")
     else
       render :edit, status: :unprocessable_entity
     end

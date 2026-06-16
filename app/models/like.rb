@@ -5,7 +5,7 @@ class Like < ApplicationRecord
   belongs_to :likeable, polymorphic: true
 
   validates :emoji,    inclusion: { in: EMOJIS }
-  validates :user_id,  uniqueness: { scope: [:likeable_type, :likeable_id, :emoji] }
+  validates :user_id,  uniqueness: { scope: [ :likeable_type, :likeable_id, :emoji ] }
 
   after_create_commit :create_notification
 

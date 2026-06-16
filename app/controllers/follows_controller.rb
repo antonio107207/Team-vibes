@@ -1,6 +1,6 @@
 class FollowsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:create, :destroy]
+  before_action :set_user, only: [ :create, :destroy ]
 
   def index
     @followees = current_user.followees.includes(:hobby_entries).order(:name)

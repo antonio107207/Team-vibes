@@ -11,6 +11,6 @@ class CreateTagsAndTaggings < ActiveRecord::Migration[8.1]
       t.references :hobby_entry, null: false, foreign_key: true
       t.timestamps
     end
-    add_index :taggings, [:tag_id, :hobby_entry_id], unique: true
+    add_index :taggings, [ :tag_id, :hobby_entry_id ], unique: true
   end
 end

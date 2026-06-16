@@ -5,6 +5,6 @@ class CreateFollows < ActiveRecord::Migration[8.1]
       t.references :followee, null: false, foreign_key: { to_table: :users }
       t.timestamps
     end
-    add_index :follows, [:follower_id, :followee_id], unique: true
+    add_index :follows, [ :follower_id, :followee_id ], unique: true
   end
 end

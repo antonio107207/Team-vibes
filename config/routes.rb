@@ -6,14 +6,14 @@ Rails.application.routes.draw do
 
   root "feed#index"
 
-  resources :hobby_entries, except: [:index] do
-    resources :likes,    only: [:create, :destroy]
-    resources :comments, only: [:create, :destroy]
-    resource  :favorite, only: [:create, :destroy]
+  resources :hobby_entries, except: [ :index ] do
+    resources :likes,    only: [ :create, :destroy ]
+    resources :comments, only: [ :create, :destroy ]
+    resource  :favorite, only: [ :create, :destroy ]
   end
 
-  resources :profiles, only: [:show, :edit, :update], param: :id do
-    resource :follow, only: [:create, :destroy]
+  resources :profiles, only: [ :show, :edit, :update ], param: :id do
+    resource :follow, only: [ :create, :destroy ]
   end
 
   get "favorites",  to: "favorites#index",  as: :favorites
@@ -32,10 +32,10 @@ Rails.application.routes.draw do
   get "mentions",    to: "mentions#index"
   get "tags/:name",  to: "tags#show",   as: :tag
 
-  resources :notifications, only: [:index]
+  resources :notifications, only: [ :index ]
 
-  resources :conversations, only: [:index, :show, :create] do
-    resources :messages, only: [:create]
+  resources :conversations, only: [ :index, :show, :create ] do
+    resources :messages, only: [ :create ]
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

@@ -40,7 +40,7 @@ module TeamVibes
     config.generators.system_tests = nil
 
     config.i18n.default_locale = :uk
-    config.i18n.available_locales = [:uk, :en]
+    config.i18n.available_locales = [ :uk, :en ]
     config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.yml")]
   end
 end
