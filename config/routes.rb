@@ -6,24 +6,37 @@ Rails.application.routes.draw do
 
   root "feed#index"
 
-  resources :hobby_entries, except: [:index] do
-    resources :likes,    only: [:create, :destroy]
-    resources :comments, only: [:create, :destroy]
-    resource  :favorite, only: [:create, :destroy]
+  resources :hobby_entries, except: [ :index ] do
+    resources :likes,    only: [ :create, :destroy ]
+    resources :comments, only: [ :create, :destroy ]
+    resource  :favorite, only: [ :create, :destroy ]
   end
 
-  resources :profiles, only: [:show, :edit, :update], param: :id do
-    resource :follow, only: [:create, :destroy]
+  resources :profiles, only: [ :show, :edit, :update ], param: :id do
+    resource :follow, only: [ :create, :destroy ]
   end
 
   get "favorites",  to: "favorites#index",  as: :favorites
   get "following",  to: "follows#index",    as: :following
+  get "trending",   to: "trending#index",   as: :trending
 
   get "categories/:category", to: "categories#show", as: :category
 
   post "locale", to: "locales#update", as: :locale
 
   get "link_preview", to: "link_previews#show"
+
+  post "translations", to: "translations#create"
+
+  get "search",      to: "search#index"
+  get "mentions",    to: "mentions#index"
+  get "tags/:name",  to: "tags#show",   as: :tag
+
+  resources :notifications, only: [ :index ]
+
+  resources :conversations, only: [ :index, :show, :create ] do
+    resources :messages, only: [ :create ]
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

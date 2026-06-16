@@ -1,0 +1,40 @@
+<% content_for :title, @other_user.name %>
+
+<%= turbo_stream_from "conversation_#{@conversation.id}:#{current_user.id}" %>
+
+<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden flex flex-col"
+     style="height: calc(100vh - 9rem)">
+
+  <%# Header %>
+  <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-100 dark:border-gray-700 shrink-0">
+    <%= link_to conversations_path,
+          class: "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition p-1 -ml-1 rounded-lg" do %>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    <% end %>
+    <img src="<%= user_avatar_url(@other_user) %>" class="w-9 h-9 rounded-full object-cover shrink-0" alt="">
+    <%= link_to @other_user.name, profile_path(@other_user),
+          class: "font-semibold text-gray-900 dark:text-white hover:underline text-sm" %>
+    <% if @other_user.position.present? %>
+      <span class="text-xs text-gray-400 dark:text-gray-500 hidden sm:block">· <%= @other_user.position %></span>
+    <% end %>
+  </div>
+
+  <%# Messages list %>
+  <div id="messages_list"
+       data-controller="autoscroll"
+       class="flex-1 overflow-y-auto px-4 py-4 space-y-2">
+    <% if @messages.empty? %>
+      <p class="text-center text-gray-400 dark:text-gray-500 text-sm py-8"><%= t("conversations.no_messages") %></p>
+    <% else %>
+      <%= render partial: "messages/message", collection: @messages, locals: { viewer_id: current_user.id } %>
+    <% end %>
+  </div>
+
+  <%# Compose form %>
+  <div class="border-t border-gray-100 dark:border-gray-700 px-4 py-3 shrink-0">
+    <%= render "messages/form", conversation: @conversation %>
+  </div>
+
+</div>

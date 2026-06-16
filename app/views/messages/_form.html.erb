@@ -1,0 +1,15 @@
+<%= form_with model: [conversation, Message.new], id: "message_form",
+      data: { turbo_stream: true } do |f| %>
+  <div class="flex gap-2">
+    <%= f.text_field :body,
+          placeholder: t("conversations.new_message"),
+          autocomplete: "off",
+          class: "flex-1 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700
+                  text-gray-900 dark:text-white rounded-xl px-4 py-2.5 text-sm
+                  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent
+                  placeholder-gray-400 dark:placeholder-gray-500" %>
+    <%= f.submit t("conversations.send"),
+          class: "shrink-0 bg-indigo-600 text-white text-sm font-medium px-4 py-2.5 rounded-xl
+                  hover:bg-indigo-700 transition cursor-pointer" %>
+  </div>
+<% end %>

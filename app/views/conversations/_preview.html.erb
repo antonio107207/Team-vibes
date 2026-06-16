@@ -1,0 +1,36 @@
+<% other   = conversation.other_participant(current_user) %>
+<% unread  = conversation.unread_count_for(current_user) %>
+<% last_msg = conversation.messages.order(:created_at).last %>
+
+<div id="conversation_<%= conversation.id %>_preview">
+  <%= link_to conversation_path(conversation),
+        class: "flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition #{unread > 0 ? 'bg-indigo-50/60 dark:bg-indigo-900/10' : ''}" do %>
+    <div class="relative shrink-0">
+      <img src="<%= user_avatar_url(other) %>" class="w-11 h-11 rounded-full object-cover" alt="">
+      <% if unread > 0 %>
+        <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-indigo-600 rounded-full border-2 border-white dark:border-gray-800"></span>
+      <% end %>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex justify-between items-baseline gap-2">
+        <span class="text-sm font-semibold text-gray-900 dark:text-white truncate"><%= other.name %></span>
+        <% if last_msg %>
+          <span class="text-xs text-gray-400 shrink-0"><%= time_ago_in_words(last_msg.created_at) %></span>
+        <% end %>
+      </div>
+      <p class="text-xs truncate mt-0.5 <%= unread > 0 ? 'text-gray-700 dark:text-gray-200 font-medium' : 'text-gray-400 dark:text-gray-500' %>">
+        <% if last_msg %>
+          <% if last_msg.sender_id == current_user.id %>
+            <span class="text-gray-400 font-normal">Ви: </span>
+          <% end %>
+          <%= last_msg.body.truncate(55) %>
+        <% else %>
+          <span class="italic"><%= t("conversations.no_messages") %></span>
+        <% end %>
+      </p>
+    </div>
+    <% if unread > 0 %>
+      <span class="shrink-0 bg-indigo-600 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 flex items-center justify-center px-1"><%= unread > 99 ? "99+" : unread %></span>
+    <% end %>
+  <% end %>
+</div>

@@ -5,7 +5,7 @@ UK_PLURAL_RULE = lambda { |n|
   mod10  = n.abs % 10
   mod100 = n.abs % 100
   if    mod10 == 1 && mod100 != 11                                     then :one
-  elsif [2, 3, 4].include?(mod10) && ![12, 13, 14].include?(mod100)   then :few
+  elsif [ 2, 3, 4 ].include?(mod10) && ![ 12, 13, 14 ].include?(mod100)   then :few
   elsif mod10 == 0 || (5..9).cover?(mod10) || (11..14).cover?(mod100) then :many
   else :other
   end

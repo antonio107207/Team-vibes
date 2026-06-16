@@ -40,6 +40,24 @@
     </div>
   </div>
 
+  <%# Tags %>
+  <div>
+    <%= f.label :tag_list, t('entries.form.tags_label'), class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" %>
+    <div data-controller="tag-input"
+         data-action="click->tag-input#focusInput"
+         class="flex flex-wrap gap-1.5 items-center p-2 min-h-10 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg cursor-text focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent transition">
+      <%= f.hidden_field :tag_list, data: { "tag-input-target": "hidden" } %>
+      <span data-tag-input-target="chips" class="contents"></span>
+      <input type="text"
+             data-tag-input-target="input"
+             data-action="keydown->tag-input#onKey blur->tag-input#onBlur"
+             placeholder="<%= t('entries.form.tags_placeholder') %>"
+             autocomplete="off"
+             class="flex-1 min-w-24 outline-none bg-transparent text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500">
+    </div>
+    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1"><%= t('entries.form.tags_hint') %></p>
+  </div>
+
   <%# Existing attachments (edit mode) %>
   <% if entry.attachments.attached? %>
     <%

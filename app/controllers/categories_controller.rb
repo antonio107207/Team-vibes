@@ -2,7 +2,7 @@ class CategoriesController < ApplicationController
   def show
     category = params[:category]
     unless HobbyEntry.categories.key?(category)
-      redirect_to root_path, alert: t('categories.not_found')
+      redirect_to root_path, alert: t("categories.not_found")
       return
     end
     @category = category

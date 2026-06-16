@@ -1,0 +1,41 @@
+<div id="reactions_<%= entry.id %>" class="flex items-center gap-1.5 flex-wrap">
+  <%# Reaction bubbles — only show emojis that have at least one reaction %>
+  <% reactions_by_emoji = entry.likes.group_by(&:emoji) %>
+  <% Like::EMOJIS.each do |emoji| %>
+    <% group = reactions_by_emoji[emoji] %>
+    <% next unless group&.any? %>
+    <% reacted = group.any? { |l| l.user_id == current_user&.id } %>
+    <%= button_to hobby_entry_likes_path(entry),
+          method:  :post,
+          params:  { emoji: emoji },
+          data:    { turbo_stream: true },
+          class:   "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border transition cursor-pointer #{reacted ? 'bg-indigo-50 dark:bg-indigo-900/40 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 font-semibold' : 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-indigo-300 dark:hover:border-indigo-500'}" do %>
+      <%= emoji %>&nbsp;<span><%= group.size %></span>
+    <% end %>
+  <% end %>
+
+  <%# Emoji picker button (only for signed-in users) %>
+  <% if current_user %>
+    <div class="relative" data-controller="reactions">
+      <button type="button"
+              data-action="click->reactions#togglePicker"
+              class="flex items-center justify-center w-6 h-6 rounded-full border border-dashed border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 hover:border-indigo-400 dark:hover:border-indigo-500 hover:text-indigo-500 transition cursor-pointer text-sm">
+        +
+      </button>
+
+      <div data-reactions-target="picker"
+           class="hidden absolute bottom-full left-0 mb-1.5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-xl p-1.5 flex gap-0.5 z-30">
+        <% Like::EMOJIS.each do |emoji| %>
+          <% reacted = entry.likes.any? { |l| l.user_id == current_user.id && l.emoji == emoji } %>
+          <%= button_to hobby_entry_likes_path(entry),
+                method: :post,
+                params: { emoji: emoji },
+                data:   { turbo_stream: true },
+                class:  "text-lg p-1.5 rounded-xl transition cursor-pointer #{reacted ? 'bg-indigo-100 dark:bg-indigo-900/50 ring-1 ring-indigo-300 dark:ring-indigo-600' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}" do %>
+            <%= emoji %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

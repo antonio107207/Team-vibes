@@ -5,7 +5,7 @@
       <%= link_to comment.user.name, profile_path(comment.user), class: "text-xs font-semibold text-gray-800 dark:text-gray-200 hover:underline" %>
       <span class="text-xs text-gray-400 dark:text-gray-500"><%= time_ago_in_words(comment.created_at) %> <%= t('entry_card.ago') %></span>
     </div>
-    <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5"><%= comment.body %></p>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5"><%= render_mention_body(comment.body) %></p>
   </div>
   <% if comment.user == current_user %>
     <%= button_to hobby_entry_comment_path(comment.commentable, comment), method: :delete,

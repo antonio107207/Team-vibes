@@ -13,10 +13,9 @@ export default class extends Controller {
     const from = this.parseISO(this.fromTarget.value)
     const to   = this.parseISO(this.toTarget.value)
 
-    this.fp = window.flatpickr(this.displayTarget, {
+    const fpConfig = {
       mode: "range",
       dateFormat: "d.m.Y",
-      locale: this.localeValue === "uk" ? "uk" : undefined,
       defaultDate: from && to ? [from, to] : undefined,
       disableMobile: true,
       onChange: (dates) => {
@@ -26,7 +25,9 @@ export default class extends Controller {
           this.element.closest("form").requestSubmit()
         }
       }
-    })
+    }
+    if (this.localeValue === "uk") fpConfig.locale = "uk"
+    this.fp = window.flatpickr(this.displayTarget, fpConfig)
   }
 
   disconnect() {

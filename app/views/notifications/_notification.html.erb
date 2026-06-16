@@ -1,0 +1,17 @@
+<%= link_to notification_link(notification), id: dom_id(notification),
+      class: "flex items-start gap-3 p-3 rounded-xl transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50 #{notification.read? ? '' : 'bg-indigo-50 dark:bg-indigo-900/20'}" do %>
+  <img src="<%= user_avatar_url(notification.actor) %>"
+       class="w-9 h-9 rounded-full object-cover shrink-0 mt-0.5"
+       alt="<%= notification.actor.name %>">
+  <div class="flex-1 min-w-0">
+    <p class="text-sm text-gray-700 dark:text-gray-200 leading-snug">
+      <%= notification_text(notification) %>
+    </p>
+    <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+      <%= time_ago_in_words(notification.created_at) %> <%= t("entry_card.ago") %>
+    </p>
+  </div>
+  <% unless notification.read? %>
+    <span class="w-2 h-2 bg-indigo-500 rounded-full shrink-0 mt-2"></span>
+  <% end %>
+<% end %>

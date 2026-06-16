@@ -1,0 +1,54 @@
+<% content_for :title, @query.present? ? t("search.results_for", q: @query) : t("search.title") %>
+
+<div class="space-y-6">
+  <% if @query.length >= 2 %>
+    <%# People section %>
+    <% if @users.any? %>
+      <div>
+        <h2 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+          <%= t("search.people") %>
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          <% @users.each do |user| %>
+            <%= link_to profile_path(user),
+                  class: "flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition group" do %>
+              <img src="<%= user_avatar_url(user) %>" class="w-8 h-8 rounded-full object-cover">
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
+                <%= user.name %>
+              </span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Posts section %>
+    <div>
+      <% if @entries.any? %>
+        <h2 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+          <%= t("search.posts") %> (<%= @entries.total_count %>)
+        </h2>
+        <div class="space-y-4">
+          <% @entries.each do |entry| %>
+            <%= render "shared/entry_card", entry: entry %>
+          <% end %>
+        </div>
+        <div class="mt-6">
+          <%= paginate @entries %>
+        </div>
+      <% elsif @users.empty? %>
+        <div class="py-16 text-center text-gray-400 dark:text-gray-500">
+          <svg class="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M21 21l-4.35-4.35M17 11A6 6 0 105 11a6 6 0 0012 0z"/>
+          </svg>
+          <p class="text-sm"><%= t("search.no_results", q: @query) %></p>
+        </div>
+      <% end %>
+    </div>
+  <% elsif @query.present? %>
+    <p class="text-sm text-gray-400 dark:text-gray-500 text-center py-8">
+      <%= t("search.min_chars") %>
+    </p>
+  <% end %>
+</div>

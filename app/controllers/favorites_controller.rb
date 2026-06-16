@@ -1,6 +1,6 @@
 class FavoritesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_entry, only: [:create, :destroy]
+  before_action :set_entry, only: [ :create, :destroy ]
 
   def index
     @entries = current_user.favorited_entries

@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
         format.html { redirect_to @entry }
       end
     else
-      redirect_to @entry, alert: t('comments.empty_error')
+      redirect_to @entry, alert: t("comments.empty_error")
     end
   end
 

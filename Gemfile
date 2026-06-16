@@ -20,6 +20,9 @@ gem "tailwindcss-rails"
 # Pagination
 gem "kaminari"
 
+# Translation
+gem "deepl-rb", require: "deepl"
+
 # Auth
 gem "devise"
 gem "omniauth-google-oauth2"
