@@ -59,7 +59,7 @@
 <% end %>
 
 <%# Feed %>
-<div id="feed_entries" class="space-y-4">
+<div id="feed_entries" class="space-y-4" data-controller="infinite-scroll">
   <% if @entries.empty? %>
     <div class="text-center py-16 text-gray-400 dark:text-gray-500">
       <p class="text-4xl mb-3">✨</p>
@@ -71,6 +71,6 @@
     <% @entries.each do |entry| %>
       <%= render "shared/entry_card", entry: entry %>
     <% end %>
-    <%= paginate @entries %>
+    <%= render "feed/scroll_sentinel", entries: @entries %>
   <% end %>
 </div>

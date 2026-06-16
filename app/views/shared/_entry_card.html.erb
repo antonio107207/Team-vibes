@@ -1,7 +1,8 @@
 <% show_translate = current_user.present? && should_offer_translation?(entry) %>
 <div id="<%= dom_id(entry) %>"
      class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 space-y-3 transition-colors duration-200"
-     data-controller="<%= 'translate' if show_translate %>">
+     data-controller="<%= 'translate' if show_translate %>"
+     <%= "data-translate-cache-key-value=\"#{entry.id}_#{entry.updated_at.to_i}_#{I18n.locale}\"" if show_translate %>>
   <%# Header %>
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-2">
@@ -40,7 +41,7 @@
               data-action="click->translate#toggle"
               data-translate-label="<%= t('entry_card.translate') %>"
               data-original-label="<%= t('entry_card.show_original') %>"
-              class="text-xs text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition disabled:opacity-40">
+              class="text-xs text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition disabled:opacity-40 cursor-pointer">
         <%= t('entry_card.translate') %>
       </button>
     </div>

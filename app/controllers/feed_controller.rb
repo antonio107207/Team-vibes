@@ -11,8 +11,13 @@ class FeedController < ApplicationController
     scope = scope.where(created_at: ..Date.parse(params[:to]).end_of_day) if params[:to].present?
 
     order_dir = params[:sort] == "oldest" ? :asc : :desc
-    @entries = scope.order(created_at: order_dir).page(params[:page]).per(20)
+    @entries = scope.order(created_at: order_dir).page(params[:page]).per(10)
     @users = User.joins(:hobby_entries).distinct.order(:name)
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   rescue ArgumentError
     @entries = HobbyEntry.none.page(1)
     @users = User.joins(:hobby_entries).distinct.order(:name)

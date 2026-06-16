@@ -2,13 +2,17 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["title", "description", "button"]
+  static values  = { cacheKey: String }
 
   connect() {
     this.originalTitle       = this.hasTitleTarget       ? this.titleTarget.innerHTML       : null
     this.originalDescription = this.hasDescriptionTarget ? this.descriptionTarget.innerHTML : null
-    this.cachedTitle         = null
-    this.cachedDescription   = null
     this.isTranslated        = false
+
+    // Restore cached translation from localStorage (survives page reloads & Turbo navigation)
+    const stored = this.loadFromStorage()
+    this.cachedTitle       = stored?.title       ?? null
+    this.cachedDescription = stored?.description ?? null
   }
 
   async toggle() {
@@ -45,6 +49,7 @@ export default class extends Controller {
 
       this.cachedTitle       = data.title
       this.cachedDescription = data.description
+      this.saveToStorage({ title: data.title, description: data.description })
       this.applyTranslation()
     } catch {
       this.buttonTarget.disabled = false
@@ -53,8 +58,8 @@ export default class extends Controller {
   }
 
   applyTranslation() {
-    if (this.cachedTitle       && this.hasTitleTarget)       this.titleTarget.textContent    = this.cachedTitle
-    if (this.cachedDescription && this.hasDescriptionTarget) this.descriptionTarget.innerHTML = this.cachedDescription
+    if (this.cachedTitle       && this.hasTitleTarget)       this.titleTarget.textContent     = this.cachedTitle
+    if (this.cachedDescription && this.hasDescriptionTarget) this.descriptionTarget.innerHTML  = this.cachedDescription
     this.isTranslated = true
     this.buttonTarget.disabled = false
     this.buttonTarget.textContent = this.buttonTarget.dataset.originalLabel
@@ -65,5 +70,19 @@ export default class extends Controller {
     if (this.hasDescriptionTarget) this.descriptionTarget.innerHTML = this.originalDescription
     this.isTranslated = false
     this.buttonTarget.textContent = this.buttonTarget.dataset.translateLabel
+  }
+
+  // localStorage helpers — key includes entry id + updated_at so it auto-invalidates on edit
+  loadFromStorage() {
+    if (!this.hasCacheKeyValue) return null
+    try {
+      const raw = localStorage.getItem(`tv_tr_${this.cacheKeyValue}`)
+      return raw ? JSON.parse(raw) : null
+    } catch { return null }
+  }
+
+  saveToStorage(data) {
+    if (!this.hasCacheKeyValue) return
+    try { localStorage.setItem(`tv_tr_${this.cacheKeyValue}`, JSON.stringify(data)) } catch {}
   }
 }

@@ -13,6 +13,8 @@ module ApplicationHelper
   end
 
   def should_offer_translation?(entry)
-    ENV["DEEPL_API_KEY"].present? && entry_locale(entry) != I18n.locale.to_sym
+    ENV["DEEPL_API_KEY"].present? &&
+      entry.user_id != current_user&.id &&
+      entry_locale(entry) != I18n.locale.to_sym
   end
 end
