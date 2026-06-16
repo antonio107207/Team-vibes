@@ -1,9 +1,15 @@
 class HobbyEntry < ApplicationRecord
   belongs_to :user
-  has_many :likes, as: :likeable, dependent: :destroy
-  has_many :comments, as: :commentable, dependent: :destroy
+  has_many :likes,     as: :likeable,   dependent: :destroy
+  has_many :comments,  as: :commentable, dependent: :destroy
   has_many :favorites, dependent: :destroy
+  has_many :taggings,  dependent: :destroy
+  has_many :tags,      through: :taggings
   has_many_attached :attachments
+
+  attr_writer :tag_list
+
+  after_save :persist_tag_list, if: -> { @tag_list }
 
   ALLOWED_TYPES = %w[
     image/jpeg image/png image/gif image/webp
@@ -37,7 +43,15 @@ class HobbyEntry < ApplicationRecord
   validates :category, presence: true
   validates :rating, numericality: { in: 1..5 }, allow_nil: true
 
-  scope :recent, -> { order(created_at: :desc) }
+  def tag_list
+    tags.loaded? ? tags.map(&:name).join(", ") : tags.pluck(:name).join(", ")
+  end
+
+  scope :recent,  -> { order(created_at: :desc) }
+  scope :search,  ->(q) {
+    p = "%#{sanitize_sql_like(q)}%"
+    where("title ILIKE :p OR description ILIKE :p", p: p)
+  }
 
   after_create_commit  -> { broadcast_refresh_to "feed" }
   after_destroy_commit -> { broadcast_refresh_to "feed" }
@@ -55,6 +69,14 @@ class HobbyEntry < ApplicationRecord
   end
 
   private
+
+  def persist_tag_list
+    names = @tag_list.to_s.split(",")
+                     .map { |n| n.strip.downcase.gsub(/\A#/, "").gsub(/\s+/, "-") }
+                     .select(&:present?).uniq.first(10)
+    self.tags = names.map { |name| Tag.find_or_create_by!(name: name) }
+    @tag_list = nil
+  end
 
   def attachments_valid
     attachments.each do |file|

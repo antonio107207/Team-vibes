@@ -1,0 +1,15 @@
+<% own = message.sender_id == viewer_id %>
+<% bubble_cls  = own ? "bg-indigo-600 text-white rounded-br-sm" : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-bl-sm" %>
+<% wrapper_cls = own ? "flex-row-reverse" : "" %>
+
+<div id="<%= dom_id(message) %>" class="flex gap-2 items-end <%= wrapper_cls %>">
+  <% unless own %>
+    <img src="<%= user_avatar_url(message.sender) %>" class="w-7 h-7 rounded-full object-cover shrink-0" alt="">
+  <% end %>
+  <div class="flex flex-col gap-0.5 max-w-[72%] <%= own ? 'items-end' : 'items-start' %>">
+    <div class="px-3.5 py-2 rounded-2xl text-sm break-words <%= bubble_cls %>">
+      <%= message.body %>
+    </div>
+    <span class="text-xs text-gray-400 dark:text-gray-500 px-1 select-none"><%= message.created_at.strftime("%H:%M") %></span>
+  </div>
+</div>

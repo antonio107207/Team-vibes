@@ -79,6 +79,8 @@
 .ql-content a { color: rgb(99 102 241); text-decoration: underline; }
 .ql-content pre, .ql-content code { white-space: pre-wrap; overflow-wrap: break-word; }
 
+input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
+
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none;

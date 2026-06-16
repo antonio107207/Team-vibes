@@ -55,7 +55,7 @@ class HobbyEntriesController < ApplicationController
 
   def entry_params
     permitted = params.require(:hobby_entry).permit(
-      :title, :category, :description, :rating, attachments: []
+      :title, :category, :description, :rating, :tag_list, attachments: []
     )
 
     if action_name == "update"

@@ -34,6 +34,18 @@
     </div>
   <% end %>
 
+  <%# Tags %>
+  <% if entry.tags.any? %>
+    <div class="flex flex-wrap gap-1.5">
+      <% entry.tags.each do |tag| %>
+        <%= link_to tag_path(tag.name),
+              class: "inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 hover:text-indigo-700 dark:hover:text-indigo-300 transition" do %>
+          <span class="text-gray-400 dark:text-gray-500 mr-0.5">#</span><%= tag.name %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
   <% if show_translate %>
     <div class="flex justify-end -mt-1">
       <button type="button"
@@ -104,12 +116,10 @@
   <% end %>
 
   <%# Actions %>
-  <div class="flex items-center gap-4 pt-1 border-t border-gray-50 dark:border-gray-700">
-    <div id="likes_<%= entry.id %>">
-      <%= render "shared/like_button", entry: entry %>
-    </div>
+  <div class="flex items-center gap-2 pt-1 border-t border-gray-50 dark:border-gray-700 flex-wrap">
+    <%= render "shared/reactions", entry: entry %>
 
-    <%= link_to hobby_entry_path(entry), class: "flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 text-sm transition" do %>
+    <%= link_to hobby_entry_path(entry), class: "flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 text-sm transition ml-1" do %>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
       <span><%= entry.comments.size %></span>
     <% end %>

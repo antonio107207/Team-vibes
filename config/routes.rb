@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   get "favorites",  to: "favorites#index",  as: :favorites
   get "following",  to: "follows#index",    as: :following
+  get "trending",   to: "trending#index",   as: :trending
 
   get "categories/:category", to: "categories#show", as: :category
 
@@ -26,6 +27,16 @@ Rails.application.routes.draw do
   get "link_preview", to: "link_previews#show"
 
   post "translations", to: "translations#create"
+
+  get "search",      to: "search#index"
+  get "mentions",    to: "mentions#index"
+  get "tags/:name",  to: "tags#show",   as: :tag
+
+  resources :notifications, only: [:index]
+
+  resources :conversations, only: [:index, :show, :create] do
+    resources :messages, only: [:create]
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest

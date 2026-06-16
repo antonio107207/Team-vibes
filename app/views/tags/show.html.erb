@@ -1,0 +1,27 @@
+<% content_for :title, t("tags.title", name: @tag.name) %>
+
+<div class="space-y-4">
+  <div class="flex items-center gap-2">
+    <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+      <span class="text-indigo-400">#</span><%= @tag.name %>
+    </h1>
+    <span class="text-sm text-gray-400 dark:text-gray-500">
+      <%= t("tags.count", count: @tag.hobby_entries.count) %>
+    </span>
+  </div>
+
+  <% if @entries.any? %>
+    <div id="feed_entries" class="space-y-4" data-controller="infinite-scroll">
+      <% @entries.each do |entry| %>
+        <%= render "shared/entry_card", entry: entry %>
+      <% end %>
+      <div id="scroll_sentinel_tag">
+        <%= render "tags/scroll_sentinel", entries: @entries, tag: @tag %>
+      </div>
+    </div>
+  <% else %>
+    <div class="py-16 text-center text-gray-400 dark:text-gray-500">
+      <p class="text-sm"><%= t("tags.empty") %></p>
+    </div>
+  <% end %>
+</div>

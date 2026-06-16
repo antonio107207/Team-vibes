@@ -1,6 +1,6 @@
 class FeedController < ApplicationController
   def index
-    scope = HobbyEntry.includes(:user, :likes, :comments)
+    scope = HobbyEntry.includes(:user, :likes, :comments, :tags)
 
     if params[:filter] == "following"
       scope = scope.where(user_id: current_user.followee_ids)

@@ -1,0 +1,13 @@
+<%= turbo_stream.append "feed_entries" do %>
+  <% @trending_entries.each do |entry| %>
+    <%= render "shared/entry_card", entry: entry %>
+  <% end %>
+<% end %>
+
+<% if @trending_entries.next_page %>
+  <%= turbo_stream.replace "scroll_sentinel_trending" do %>
+    <%= render "trending/scroll_sentinel", entries: @trending_entries %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.remove "scroll_sentinel_trending" %>
+<% end %>

@@ -86,6 +86,10 @@
   </head>
 
   <body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200" data-controller="theme">
+    <% if user_signed_in? %>
+      <%= turbo_stream_from "notifications:#{current_user.id}" %>
+      <%= turbo_stream_from "dm_badge:#{current_user.id}" %>
+    <% end %>
     <%= render "layouts/navbar" %>
 
     <% if notice %>

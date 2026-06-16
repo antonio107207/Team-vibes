@@ -1,0 +1,21 @@
+<% content_for :title, t("conversations.title") %>
+
+<%= turbo_stream_from "conversations_list:#{current_user.id}" %>
+
+<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
+  <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+    <h1 class="font-bold text-gray-900 dark:text-white"><%= t("conversations.title") %></h1>
+  </div>
+
+  <% if @conversations.empty? %>
+    <div class="py-16 text-center text-gray-400 dark:text-gray-500">
+      <p class="text-4xl mb-3">💬</p>
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400"><%= t("conversations.empty") %></p>
+      <p class="text-xs mt-1"><%= t("conversations.empty_subtitle") %></p>
+    </div>
+  <% else %>
+    <div id="conversations_list" class="divide-y divide-gray-100 dark:divide-gray-700">
+      <%= render partial: "conversations/preview", collection: @conversations, locals: { current_user: current_user } %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,36 @@
+<% content_for :title, t("trending.title") %>
+
+<%# Trending tags cloud %>
+<% if @trending_tags.any? %>
+  <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 mb-4">
+    <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+      <%= t("trending.tags_title") %>
+    </p>
+    <div class="flex flex-wrap gap-2">
+      <% @trending_tags.each_with_index do |tag, i| %>
+        <% size = i < 3 ? "text-base font-semibold" : i < 8 ? "text-sm font-medium" : "text-xs" %>
+        <%= link_to tag_path(tag.name),
+              class: "#{size} px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 hover:text-indigo-700 dark:hover:text-indigo-300 transition" do %>
+          <span class="text-gray-400 dark:text-gray-500">#</span><%= tag.name %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<%# Trending posts %>
+<div id="feed_entries" class="space-y-4" data-controller="infinite-scroll">
+  <% if @trending_entries.any? %>
+    <% @trending_entries.each do |entry| %>
+      <%= render "shared/entry_card", entry: entry %>
+    <% end %>
+    <div id="scroll_sentinel_trending">
+      <%= render "trending/scroll_sentinel", entries: @trending_entries %>
+    </div>
+  <% else %>
+    <div class="py-16 text-center text-gray-400 dark:text-gray-500">
+      <p class="text-4xl mb-3">🔥</p>
+      <p class="text-sm"><%= t("trending.empty") %></p>
+    </div>
+  <% end %>
+</div>

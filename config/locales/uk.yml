@@ -1,9 +1,52 @@
 uk:
+  trending:
+    title: "Популярне"
+    tags_title: "Трендові теги"
+    empty: "Поки що нічого немає — будь першим хто відреагує!"
+
+  tags:
+    title: "#%{name}"
+    count:
+      one: "1 пост"
+      few: "%{count} пости"
+      many: "%{count} постів"
+      other: "%{count} постів"
+    not_found: "Тег не знайдено."
+    empty: "Постів з цим тегом ще немає."
+
+  search:
+    title: "Пошук"
+    placeholder: "Шукати пости та людей..."
+    submit: "Шукати"
+    people: "Люди"
+    posts: "Пости"
+    results_for: "Пошук: %{q}"
+    no_results: "Нічого не знайдено за «%{q}»"
+    min_chars: "Введіть щонайменше 2 символи"
+
+  conversations:
+    title: "Повідомлення"
+    empty: "Поки що немає розмов"
+    empty_subtitle: "Почніть розмову з профілю користувача"
+    start_dm: "Написати"
+    no_messages: "Скажіть привіт! 👋"
+    new_message: "Написати повідомлення..."
+    send: "Надіслати"
+
+  notifications:
+    title: "Сповіщення"
+    empty: "Поки що немає сповіщень"
+    liked: "%{actor} лайкнув ваш пост «%{title}»"
+    commented: "%{actor} прокоментував ваш пост «%{title}»"
+    followed: "%{actor} підписався на вас"
+    mentioned: "%{actor} згадав вас у пості «%{title}»"
+
   nav:
     app_name: "Team Vibes"
     add: "+ Додати"
     all: "Всі"
     following_tab: "👥 Підписки"
+    trending: "Популярне"
     edit_profile: "Редагувати профіль"
     favorites: "Улюблене"
     following: "Підписки"
@@ -49,6 +92,9 @@ uk:
       max_size: "до 50 МБ на файл"
       submit_new: "Додати ✨"
       submit_edit: "Зберегти"
+      tags_label: "Теги"
+      tags_placeholder: "Додати тег..."
+      tags_hint: "Enter або кома для додавання · до 10 тегів · макс. 32 символи"
 
   show_entry:
     photos_hint_many: "%{count} фото · натисніть для перегляду"

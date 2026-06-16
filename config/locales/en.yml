@@ -1,9 +1,50 @@
 en:
+  trending:
+    title: "Trending"
+    tags_title: "Trending tags"
+    empty: "Nothing trending yet — be the first to react!"
+
+  tags:
+    title: "#%{name}"
+    count:
+      one: "1 post"
+      other: "%{count} posts"
+    not_found: "Tag not found."
+    empty: "No posts with this tag yet."
+
+  search:
+    title: "Search"
+    placeholder: "Search posts and people..."
+    submit: "Search"
+    people: "People"
+    posts: "Posts"
+    results_for: "Search: %{q}"
+    no_results: "Nothing found for «%{q}»"
+    min_chars: "Enter at least 2 characters"
+
+  conversations:
+    title: "Messages"
+    empty: "No conversations yet"
+    empty_subtitle: "Start a conversation from someone's profile"
+    start_dm: "Message"
+    no_messages: "Say hi! 👋"
+    new_message: "Write a message..."
+    send: "Send"
+
+  notifications:
+    title: "Notifications"
+    empty: "No notifications yet"
+    liked: "%{actor} liked your post «%{title}»"
+    commented: "%{actor} commented on your post «%{title}»"
+    followed: "%{actor} started following you"
+    mentioned: "%{actor} mentioned you in «%{title}»"
+
   nav:
     app_name: "Team Vibes"
     add: "+ Add"
     all: "All"
     following_tab: "👥 Following"
+    trending: "Trending"
     edit_profile: "Edit profile"
     favorites: "Favorites"
     following: "Following"
@@ -49,6 +90,9 @@ en:
       max_size: "up to 50 MB per file"
       submit_new: "Add ✨"
       submit_edit: "Save"
+      tags_label: "Tags"
+      tags_placeholder: "Add a tag..."
+      tags_hint: "Enter or comma to add · up to 10 tags · max 32 chars"
 
   show_entry:
     photos_hint_many: "%{count} photos · click to view"
