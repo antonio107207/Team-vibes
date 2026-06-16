@@ -24,6 +24,8 @@ en:
   entry_card:
     ago: "ago"
     delete_confirm: "Delete this entry?"
+    translate: "🌐 Translate"
+    show_original: "← Show original"
 
   entries:
     new_title: "New entry"

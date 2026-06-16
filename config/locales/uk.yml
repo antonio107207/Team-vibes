@@ -24,6 +24,8 @@ uk:
   entry_card:
     ago: "тому"
     delete_confirm: "Видалити цей запис?"
+    translate: "🌐 Перекласти"
+    show_original: "← Оригінал"
 
   entries:
     new_title: "Новий запис"

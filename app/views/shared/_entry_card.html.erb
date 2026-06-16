@@ -1,4 +1,7 @@
-<div id="<%= dom_id(entry) %>" class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 space-y-3 transition-colors duration-200">
+<% show_translate = current_user.present? && should_offer_translation?(entry) %>
+<div id="<%= dom_id(entry) %>"
+     class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 space-y-3 transition-colors duration-200"
+     data-controller="<%= 'translate' if show_translate %>">
   <%# Header %>
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-2">
@@ -19,14 +22,30 @@
 
   <%# Content %>
   <%= link_to hobby_entry_path(entry), class: "block group" do %>
-    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition"><%= entry.title %></h3>
-    <% if entry.description.present? %>
-      <% clamp ||= true %>
-      <div class="ql-content text-sm text-gray-600 dark:text-gray-300 mt-1 <%= clamp ? 'line-clamp-3' : '' %>">
-        <%= sanitize entry.description %>
-      </div>
-    <% end %>
+    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition"<% if show_translate %> data-translate-target="title"<% end %>><%= entry.title %></h3>
   <% end %>
+  <% if entry.description.present? %>
+    <% clamp ||= true %>
+    <div class="ql-content text-sm text-gray-600 dark:text-gray-300 mt-1 cursor-pointer <%= clamp ? 'line-clamp-3' : '' %>"
+         data-controller="expand"
+         data-action="click->expand#expand"<% if show_translate %> data-translate-target="description"<% end %>>
+      <%= sanitize entry.description %>
+    </div>
+  <% end %>
+
+  <% if show_translate %>
+    <div class="flex justify-end -mt-1">
+      <button type="button"
+              data-translate-target="button"
+              data-action="click->translate#toggle"
+              data-translate-label="<%= t('entry_card.translate') %>"
+              data-original-label="<%= t('entry_card.show_original') %>"
+              class="text-xs text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition disabled:opacity-40">
+        <%= t('entry_card.translate') %>
+      </button>
+    </div>
+  <% end %>
+
   <% if entry.description.present? %>
     <% preview_urls = entry.description.scan(/href="(https?:\/\/[^"]+)"/).flatten.uniq.first(3) %>
     <% preview_urls = entry.description.scan(/https?:\/\/[^\s"<>]+/).uniq.first(3) if preview_urls.empty? %>
