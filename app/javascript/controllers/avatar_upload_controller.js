@@ -39,15 +39,19 @@ export default class extends Controller {
       dt.items.add(file)
       this.inputTarget.files = dt.files
       this.previewTarget.src = URL.createObjectURL(blob)
-      this.close()
+      this.dismissModal()
     }, "image/jpeg", 0.9)
   }
 
   close() {
+    this.inputTarget.value = ""
+    this.dismissModal()
+  }
+
+  dismissModal() {
     this.modalTarget.classList.add("hidden")
     this.cropper?.destroy()
     this.cropper = null
-    this.inputTarget.value = ""
   }
 
   disconnect() {
